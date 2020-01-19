@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\System.Text.Json.Transmogrify\System.Text.Json.Transmogrify.csproj" />
+      <ProjectReference Include="..\Microsoft.Extensions.DependencyInjection.Transmogrify.Json\Microsoft.Extensions.DependencyInjection.Transmogrify.Json.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,33 +1,65 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Transmogrify.Exceptions;
 
-namespace Transmogrify {
+namespace Transmogrify
+{
     public class Translator : ITranslator
     {
-        private readonly Config _config;
-        private readonly ILanguageResolver _languageResolver;
+        private readonly TransmogrifyConfig _transmogrifyConfig;
+        private readonly IEnumerable<ILanguageResolver> _languageResolvers;
         private readonly ITransmogrifyJson _transmogrifyJson;
         private readonly Dictionary<string, Dictionary<string, string>> _library;
 
         public Translator(
-            Config config, 
-            ILanguageResolver languageResolver,
+            TransmogrifyConfig transmogrifyConfig,
+            IEnumerable<ILanguageResolver> languageResolvers,
             ITransmogrifyJson transmogrifyJson)
         {
-            _config = config;
-            _languageResolver = languageResolver;
+            _transmogrifyConfig = transmogrifyConfig;
+            _languageResolvers = languageResolvers;
             _transmogrifyJson = transmogrifyJson;
             _library = new Dictionary<string, Dictionary<string, string>>();
-            
+
             LoadAllPacks();
         }
 
-        public async Task<string> GetTranslation(string key) => _library[await _languageResolver.GetLanguageCode()][key];
+        public async Task<string> GetTranslation(string key)
+        {
+            var code= await GetLanguageCode();
 
+            if (!_library[code].ContainsKey(key))
+                throw new
+                    TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\"");
+
+            return _library[code][key];
+        }
+
+        private async Task<string> GetLanguageCode()
+        {
+            foreach (var languageResolver in _languageResolvers)
+            {
+                var code = await languageResolver.GetLanguageCode();
+                if (!string.IsNullOrWhiteSpace(code) && _library.ContainsKey(code))
+                {
+                    return code;
+                }
+            }
+
+            if (String.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage))
+            {
+                throw new
+                    TransmogrifyFailedToResolveLanguageCode("Couldn't resolve a language code and no default language was set.");
+            }
+
+            return _transmogrifyConfig.DefaultLanguage;
+        } 
+        
         private void LoadAllPacks()
         {
-            foreach (var pack in _config.LanguagePacks)
+            foreach (var pack in _transmogrifyConfig.LanguagePacks)
             {
                 LoadPack(pack.Key, pack.Value);
             }
@@ -38,6 +70,5 @@ namespace Transmogrify {
             var json = File.ReadAllText(path);
             _library[lang] = _transmogrifyJson.Deserialize<Dictionary<string, string>>(json);
         }
-
     }
 }

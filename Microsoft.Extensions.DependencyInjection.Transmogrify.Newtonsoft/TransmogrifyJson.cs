@@ -1,6 +1,7 @@
-﻿using Transmogrify;
+﻿using Newtonsoft.Json;
+using Transmogrify;
 
-namespace Newtonsoft.Json.Transmogrify
+namespace Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft
 {
     public class TransmogrifyJson : ITransmogrifyJson
     {
