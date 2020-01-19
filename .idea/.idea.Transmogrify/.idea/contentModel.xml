@@ -13,44 +13,6 @@
     <e p="C:\Users\Toshik\.Rider2019.3\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\Toshik\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_Transmogrify.-437401932.00" t="ExcludeRecursive" />
     <e p="D:\WS\Rider\Transmogrify" t="IncludeFlat">
-      <e p="Microsoft.Extensions.DependencyInjection.Transmogrify" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netstandard2.0" t="Include">
-              <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="RegisterServices.cs" t="Include" />
-      </e>
-      <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Json" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Json.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netcoreapp3.1" t="Include">
-              <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Json.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="RegisterServices.cs" t="Include" />
-        <e p="TransmogrifyJson.cs" t="Include" />
-      </e>
-      <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft" t="IncludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-        <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.csproj" t="IncludeRecursive" />
-        <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
-            <e p="netstandard2.0" t="Include">
-              <e p="Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.AssemblyInfo.cs" t="Include" />
-            </e>
-          </e>
-        </e>
-        <e p="RegisterServices.cs" t="Include" />
-        <e p="TransmogrifyJson.cs" t="Include" />
-      </e>
       <e p="packages" t="ExcludeRecursive" />
       <e p="sample" t="IncludeRecursive">
         <e p="appsettings.Development.json" t="Include" />
@@ -64,7 +26,7 @@
           <e p="QueryLanguageResolver.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="Sample.AssemblyInfo.cs" t="Include" />
             </e>
@@ -89,7 +51,7 @@
           <e p="HomeController.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netcoreapp2.2" t="Include">
               <e p="Sample220.AssemblyInfo.cs" t="Include" />
               <e p="Sample220.RazorAssemblyInfo.cs" t="Include" />
@@ -116,7 +78,7 @@
         <e p="ITranslator.cs" t="Include" />
         <e p="ITransmogrifyJson.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netstandard2.0" t="Include">
               <e p="Transmogrify.AssemblyInfo.cs" t="Include" />
             </e>
@@ -126,11 +88,49 @@
         <e p="Transmogrify.csproj" t="IncludeRecursive" />
         <e p="TransmogrifyConfig.cs" t="Include" />
       </e>
+      <e p="Transmogrify.DependencyInjection" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netstandard2.0" t="Include">
+              <e p="Transmogrify.DependencyInjection.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RegisterServices.cs" t="Include" />
+        <e p="Transmogrify.DependencyInjection.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="Transmogrify.DependencyInjection.Json" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Transmogrify.DependencyInjection.Json.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RegisterServices.cs" t="Include" />
+        <e p="Transmogrify.DependencyInjection.Json.csproj" t="IncludeRecursive" />
+        <e p="TransmogrifyJson.cs" t="Include" />
+      </e>
+      <e p="Transmogrify.DependencyInjection.Newtonsoft" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Release" t="Include">
+            <e p="netstandard2.0" t="Include">
+              <e p="Transmogrify.DependencyInjection.Newtonsoft.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="RegisterServices.cs" t="Include" />
+        <e p="Transmogrify.DependencyInjection.Newtonsoft.csproj" t="IncludeRecursive" />
+        <e p="TransmogrifyJson.cs" t="Include" />
+      </e>
       <e p="Transmogrify.sln" t="IncludeFlat" />
       <e p="Transmogrify.Tests" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Debug" t="Include">
+          <e p="Release" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="Transmogrify.Tests.AssemblyInfo.cs" t="Include" />
             </e>

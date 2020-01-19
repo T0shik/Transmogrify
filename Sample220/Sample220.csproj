@@ -9,7 +9,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft\Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.csproj" />
+      <ProjectReference Include="..\Transmogrify.DependencyInjection.Newtonsoft\Transmogrify.DependencyInjection.Newtonsoft.csproj" />
     </ItemGroup>
     
 </Project>

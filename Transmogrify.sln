@@ -4,9 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmogrify.Tests", "Trans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmogrify", "Transmogrify\Transmogrify.csproj", "{3A1B48B0-5318-484A-B15C-6265775E00C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.DependencyInjection.Transmogrify.Json", "Microsoft.Extensions.DependencyInjection.Transmogrify.Json\Microsoft.Extensions.DependencyInjection.Transmogrify.Json.csproj", "{DC147486-6431-48CE-9B50-C956EAC70A39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmogrify.DependencyInjection.Json", "Transmogrify.DependencyInjection.Json\Transmogrify.DependencyInjection.Json.csproj", "{DC147486-6431-48CE-9B50-C956EAC70A39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft", "Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft\Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.csproj", "{D0859AFA-5C47-4C36-85AF-6DEAA456911D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmogrify.DependencyInjection.Newtonsoft", "Transmogrify.DependencyInjection.Newtonsoft\Transmogrify.DependencyInjection.Newtonsoft.csproj", "{D0859AFA-5C47-4C36-85AF-6DEAA456911D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3CA4708C-38F8-48EE-9315-A2EBD39A2B5C}"
 EndProject
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample220", "Sample220\Sample220.csproj", "{EA701BEC-DF7F-48F9-8104-DC8D6A0F5734}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Extensions.DependencyInjection.Transmogrify", "Microsoft.Extensions.DependencyInjection.Transmogrify\Microsoft.Extensions.DependencyInjection.Transmogrify.csproj", "{62845D59-5C3B-4900-BA96-AE9A8C3D6D8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmogrify.DependencyInjection", "Transmogrify.DependencyInjection\Transmogrify.DependencyInjection.csproj", "{62845D59-5C3B-4900-BA96-AE9A8C3D6D8C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
