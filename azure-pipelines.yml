@@ -18,13 +18,16 @@ steps:
   displayName: 'Restore Packages'
   condition: succeeded()
 
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build --configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)
   displayName: 'dotnet build $(buildConfiguration)'
 
 - script: dotnet test --configuration $(buildConfiguration) --verbosity normal
   condition: succeeded()
   displayName: 'Run Tests'
+
+
 - task: DotNetCoreCLI@2
+  displayName: 'Push to Nuget'
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
