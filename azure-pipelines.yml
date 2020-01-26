@@ -25,11 +25,10 @@ steps:
   condition: succeeded()
   displayName: 'Run Tests'
 
-
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   displayName: 'Push to Nuget'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'PersonalNuget'
