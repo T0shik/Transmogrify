@@ -11,11 +11,10 @@ namespace Transmogrify
         public TransmogrifyConfig()
         {
             _languageResolvers = new List<Type>();
-            LanguagePacks = new Dictionary<string, string>();
         }
 
         public IEnumerable<Type> LanguageResolvers => _languageResolvers;
-        public Dictionary<string, string> LanguagePacks { get; }
+        public string LanguagePath { get; set; }
         public string DefaultLanguage { get; set; }
 
         public void AddResolver(Type languageResolver)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Transmogrify.Exceptions;
 
@@ -11,30 +12,40 @@ namespace Transmogrify
         private readonly TransmogrifyConfig _transmogrifyConfig;
         private readonly IEnumerable<ILanguageResolver> _languageResolvers;
         private readonly ITransmogrifyJson _transmogrifyJson;
-        private readonly Dictionary<string, Dictionary<string, string>> _library;
+        private readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> _library;
 
         public Translator(
             TransmogrifyConfig transmogrifyConfig,
             IEnumerable<ILanguageResolver> languageResolvers,
             ITransmogrifyJson transmogrifyJson)
         {
+            if (string.IsNullOrEmpty(transmogrifyConfig.LanguagePath))
+            {
+                throw new
+                    TransmogrifyInvalidLanguagePathException($"Language path: {transmogrifyConfig.LanguagePath} is not valid");
+            }
+
             _transmogrifyConfig = transmogrifyConfig;
             _languageResolvers = languageResolvers;
             _transmogrifyJson = transmogrifyJson;
-            _library = new Dictionary<string, Dictionary<string, string>>();
+            _library = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
 
-            LoadAllPacks();
+            LoadLanguagePacks();
         }
 
-        public async Task<string> GetTranslation(string key)
+        public async Task<string> GetTranslation(string file, string key)
         {
-            var code= await GetLanguageCode();
+            var code = await GetLanguageCode();
 
-            if (!_library[code].ContainsKey(key))
+            if (!_library[code].ContainsKey(file))
                 throw new
-                    TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\"");
+                    TransmogrifyMissingKeyException($"File: \"{file}\" is missing from the library: \"{code}\"");
 
-            return _library[code][key];
+            if (!_library[code][file].ContainsKey(key))
+                throw new
+                    TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\" file: \"{file}\"");
+
+            return _library[code][file][key].ToString();
         }
 
         private async Task<string> GetLanguageCode()
@@ -55,20 +66,27 @@ namespace Transmogrify
             }
 
             return _transmogrifyConfig.DefaultLanguage;
-        } 
-        
-        private void LoadAllPacks()
-        {
-            foreach (var pack in _transmogrifyConfig.LanguagePacks)
-            {
-                LoadPack(pack.Key, pack.Value);
-            }
         }
 
-        private void LoadPack(string lang, string path)
+        private void LoadLanguagePacks()
         {
-            var json = File.ReadAllText(path);
-            _library[lang] = _transmogrifyJson.Deserialize<Dictionary<string, string>>(json);
+            foreach (var packPath in Directory.EnumerateDirectories(_transmogrifyConfig.LanguagePath))
+            {
+                var pack = packPath.Split(Path.DirectorySeparatorChar).Last();
+                foreach (var filePath in Directory.EnumerateFiles(packPath, "*", SearchOption.AllDirectories))
+                {
+                    var fileName = filePath
+                                   .Split(Path.DirectorySeparatorChar).Last()
+                                   .Split('.').First();
+
+                    var json = File.ReadAllText(filePath);
+
+                    _library[pack] = new Dictionary<string, Dictionary<string, string>>
+                    {
+                        [fileName] = _transmogrifyJson.Deserialize<Dictionary<string, string>>(json) 
+                    };
+                }
+            }
         }
     }
 }

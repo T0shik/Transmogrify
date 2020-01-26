@@ -10,6 +10,9 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-      <PackageReference Include="Transmogrify.DependencyInjection" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Transmogrify.DependencyInjection\Transmogrify.DependencyInjection.csproj" />
     </ItemGroup>
 </Project>
