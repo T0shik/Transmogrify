@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
+using Transmogrify.Exceptions;
 using Xunit;
+using static Xunit.Assert;
 
 namespace Transmogrify.Tests
 {
@@ -49,6 +51,31 @@ namespace Transmogrify.Tests
                                .Returns(_library);
         }
 
+        [Fact]
+        public async Task ThrowsWhen_LanguagePackMissingFile()
+        {
+            _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync("en");
+            var languageResolvers = new[] {_mockLanguageResolver.Object};
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
+
+            Task<string> Action() => translator.GetTranslation("doesnt exist", "Hello");
+
+            await ThrowsAsync<TransmogrifyMissingKeyException>(Action);
+        } 
+        
+        
+        [Fact]
+        public async Task ThrowsWhen_LanguagePackFileMissingKey()
+        {
+            _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync("en");
+            var languageResolvers = new[] {_mockLanguageResolver.Object};
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
+
+            Task<string> Action() => translator.GetTranslation("main", "doesntexist");
+
+            await ThrowsAsync<TransmogrifyMissingKeyException>(Action);
+        } 
+        
         [Theory]
         [InlineData("en", "Hello World!")]
         [InlineData("ru", "Привет Мир!")]
@@ -60,7 +87,7 @@ namespace Transmogrify.Tests
 
             var translation1 = await translator1.GetTranslation("main", "Hello");
 
-            Assert.Equal(result, translation1);
+            Equal(result, translation1);
         }
 
         [Theory]
@@ -78,8 +105,8 @@ namespace Transmogrify.Tests
             var translation1 = await translator.GetTranslation("main", "Hello");
             var translation2 = await translator.GetTranslation("second", "Sec");
 
-            Assert.Equal(expected1, translation1);
-            Assert.Equal(expected2, translation2);
+            Equal(expected1, translation1);
+            Equal(expected2, translation2);
         }
 
         [Theory]
@@ -99,7 +126,7 @@ namespace Transmogrify.Tests
             var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
             var translation = await translator.GetTranslation("main", "Hello");
-            Assert.Equal(result, translation);
+            Equal(result, translation);
         }
 
         [Theory]
@@ -119,7 +146,7 @@ namespace Transmogrify.Tests
             var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
             var translation = await translator.GetTranslation("main", "Hello");
-            Assert.Equal(result, translation);
+            Equal(result, translation);
         }
 
         // [Theory]
