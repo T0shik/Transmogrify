@@ -1,8 +1,7 @@
 ﻿using System;
-using Transmogrify;
+using Microsoft.Extensions.DependencyInjection;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Transmogrify.DependencyInjection
 {
     public static class RegisterServices
     {

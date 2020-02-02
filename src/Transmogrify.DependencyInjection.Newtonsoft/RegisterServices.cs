@@ -1,9 +1,7 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft;
-using Transmogrify;
+using Microsoft.Extensions.DependencyInjection;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Transmogrify.DependencyInjection.Newtonsoft
 {
     public static class RegisterServices
     {
@@ -11,7 +9,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Action<TransmogrifyConfig> configBuilder)
         {
-            services.AddSingleton<ITransmogrifyJson, TransmogrifyJson>();
+            services.AddSingleton<ILibraryFactory, LibraryFactory>();
 
             return services.AddCoreTransmogrify(configBuilder);
         }

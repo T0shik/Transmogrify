@@ -42,8 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Transmogrify.DependencyInjection.Json\Transmogrify.DependencyInjection.Json.csproj" />
-      <ProjectReference Include="..\..\src\Transmogrify.DependencyInjection.Newtonsoft\Transmogrify.DependencyInjection.Newtonsoft.csproj" />
+      <ProjectReference Include="..\..\src\Transmogrify\Transmogrify.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
-using Transmogrify.Exceptions;
 using Xunit;
 
 namespace Transmogrify.Tests
@@ -13,55 +13,71 @@ namespace Transmogrify.Tests
                 LanguagePath = "./lang"
             };
 
-        [Fact]
-        public void ThrowIfLanguagePathIsNullOrEmpty()
+        private readonly Mock<ILanguageResolver> _mockLanguageResolver = new Mock<ILanguageResolver>();
+        private readonly Mock<ILibraryFactory> _mockLibraryFactory = new Mock<ILibraryFactory>();
+
+        private Dictionary<string, Dictionary<string, Dictionary<string, string>>> _library =
+            new Dictionary<string, Dictionary<string, Dictionary<string, string>>>
+            {
+                ["en"] = new Dictionary<string, Dictionary<string, string>>
+                {
+                    ["main"] = new Dictionary<string, string>
+                    {
+                        ["Hello"] = "Hello World!"
+                    },
+                    ["second"] = new Dictionary<string, string>
+                    {
+                        ["Sec"] = "Sec"
+                    }
+                },
+                ["ru"] = new Dictionary<string, Dictionary<string, string>>
+                {
+                    ["main"] = new Dictionary<string, string>
+                    {
+                        ["Hello"] = "Привет Мир!"
+                    },
+                    ["second"] = new Dictionary<string, string>
+                    {
+                        ["Sec"] = "Сек"
+                    }
+                }
+            };
+
+        public TranslationTests()
         {
-            var config = Config;
-            config.LanguagePath = "";
-            var languageResolverMock = new Mock<ILanguageResolver>();
-            Assert.Throws<TransmogrifyInvalidLanguagePathException>(() => new Translator(config,
-                                                                                         new[]
-                                                                                         {
-                                                                                             languageResolverMock.Object
-                                                                                         },
-                                                                                         new System.Text.Json.
-                                                                                             Transmogrify.
-                                                                                             TransmogrifyJson()));
+            _mockLibraryFactory.Setup(x => x.GetOrLoad())
+                               .Returns(_library);
         }
-        //todo check for errors in language pack pathing?
 
         [Theory]
         [InlineData("en", "Hello World!")]
         [InlineData("ru", "Привет Мир!")]
-        public async Task ReturnCorrectTranslation_Json(string lang, string result)
+        public async Task GetTranslations_FindsValueInGivenFileAtGivenKey(string lang, string result)
         {
-            var languageResolverMock = new Mock<ILanguageResolver>();
-            languageResolverMock.Setup(x => x.GetLanguageCode()).ReturnsAsync(lang);
+            _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync(lang);
+            var languageResolvers = new[] {_mockLanguageResolver.Object};
+            var translator1 = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
-            var translator1 = new Translator(Config, new[] {languageResolverMock.Object},
-                                             new System.Text.Json.Transmogrify.TransmogrifyJson());
-            var translator2 = new Translator(Config, new[] {languageResolverMock.Object},
-                                             new Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.
-                                                 TransmogrifyJson());
             var translation1 = await translator1.GetTranslation("main", "Hello");
-            var translation2 = await translator2.GetTranslation("main", "Hello");
+
             Assert.Equal(result, translation1);
-            Assert.Equal(result, translation2);
         }
 
         [Theory]
         [InlineData("en", "Hello World!", "Sec")]
         [InlineData("ru", "Привет Мир!", "Сек")]
-        public async Task BothFilesAreLoadedInMemory(string pack, string expected1, string expected2)
+        public async Task BothFilesAreLoadedInMemory(
+            string pack,
+            string expected1,
+            string expected2)
         {
-            var languageResolverMock1 = new Mock<ILanguageResolver>();
-            languageResolverMock1.Setup(x => x.GetLanguageCode()).ReturnsAsync(pack);
-
-            var translator = new Translator(Config, new[] {languageResolverMock1.Object},
-                                            new System.Text.Json.Transmogrify.TransmogrifyJson());
+            _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync(pack);
+            var languageResolvers = new[] {_mockLanguageResolver.Object};
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
             var translation1 = await translator.GetTranslation("main", "Hello");
             var translation2 = await translator.GetTranslation("second", "Sec");
+
             Assert.Equal(expected1, translation1);
             Assert.Equal(expected2, translation2);
         }
@@ -78,9 +94,9 @@ namespace Transmogrify.Tests
             var languageResolverMock2 = new Mock<ILanguageResolver>();
             languageResolverMock1.Setup(x => x.GetLanguageCode()).ReturnsAsync(first);
             languageResolverMock2.Setup(x => x.GetLanguageCode()).ReturnsAsync(second);
+            var languageResolvers = new[] {languageResolverMock1.Object, languageResolverMock2.Object};
 
-            var translator = new Translator(Config, new[] {languageResolverMock1.Object, languageResolverMock2.Object},
-                                            new System.Text.Json.Transmogrify.TransmogrifyJson());
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
             var translation = await translator.GetTranslation("main", "Hello");
             Assert.Equal(result, translation);
@@ -98,14 +114,14 @@ namespace Transmogrify.Tests
             var languageResolverMock2 = new Mock<ILanguageResolver>();
             languageResolverMock1.Setup(x => x.GetLanguageCode()).ReturnsAsync(first);
             languageResolverMock2.Setup(x => x.GetLanguageCode()).ReturnsAsync(second);
+            var languageResolvers = new[] {languageResolverMock1.Object, languageResolverMock2.Object};
 
-            var translator = new Translator(Config, new[] {languageResolverMock1.Object, languageResolverMock2.Object},
-                                            new System.Text.Json.Transmogrify.TransmogrifyJson());
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
 
             var translation = await translator.GetTranslation("main", "Hello");
             Assert.Equal(result, translation);
         }
-        
+
         // [Theory]
         // [InlineData(c_englishPack, "Bob")]
         // [InlineData(c_russianPack, "Боб")]
