@@ -45,7 +45,7 @@ namespace Transmogrify
                 throw new
                     TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\" file: \"{file}\"");
 
-            return _library[code][file][key].ToString();
+            return _library[code][file][key];
         }
 
         private async Task<string> GetLanguageCode()
@@ -73,7 +73,10 @@ namespace Transmogrify
             foreach (var packPath in Directory.EnumerateDirectories(_transmogrifyConfig.LanguagePath))
             {
                 var pack = packPath.Split(Path.DirectorySeparatorChar).Last();
-                foreach (var filePath in Directory.EnumerateFiles(packPath, "*", SearchOption.AllDirectories))
+                _library[pack] = new Dictionary<string, Dictionary<string, string>>();
+
+                var allFiles = Directory.EnumerateFiles(packPath, "*", SearchOption.AllDirectories).ToList();
+                foreach (var filePath in allFiles)
                 {
                     var fileName = filePath
                                    .Split(Path.DirectorySeparatorChar).Last()
@@ -81,10 +84,7 @@ namespace Transmogrify
 
                     var json = File.ReadAllText(filePath);
 
-                    _library[pack] = new Dictionary<string, Dictionary<string, string>>
-                    {
-                        [fileName] = _transmogrifyJson.Deserialize<Dictionary<string, string>>(json) 
-                    };
+                    _library[pack][fileName] = _transmogrifyJson.Deserialize<Dictionary<string, string>>(json);
                 }
             }
         }

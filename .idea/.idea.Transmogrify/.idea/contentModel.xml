@@ -85,12 +85,14 @@
               <e p="nested" t="Include">
                 <e p="nested.json" t="Include" />
               </e>
+              <e p="second.json" t="Include" />
             </e>
             <e p="ru" t="Include">
               <e p="main.json" t="Include" />
               <e p="nested" t="Include">
                 <e p="nested.json" t="Include" />
               </e>
+              <e p="second.json" t="Include" />
             </e>
           </e>
           <e p="obj" t="ExcludeRecursive">

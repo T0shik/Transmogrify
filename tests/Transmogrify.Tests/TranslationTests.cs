@@ -13,13 +13,6 @@ namespace Transmogrify.Tests
                 LanguagePath = "./lang"
             };
 
-        private const string c_file = "main";
-        private const string c_key = "Hello";
-        private const string c_englishPack = "en";
-        private const string c_russianPack = "ru";
-        private const string c_englishResult = "Hello World!";
-        private const string c_russianResult = "Привет Мир!";
-
         [Fact]
         public void ThrowIfLanguagePathIsNullOrEmpty()
         {
@@ -38,8 +31,8 @@ namespace Transmogrify.Tests
         //todo check for errors in language pack pathing?
 
         [Theory]
-        [InlineData(c_englishPack, c_englishResult)]
-        [InlineData(c_russianPack, c_russianResult)]
+        [InlineData("en", "Hello World!")]
+        [InlineData("ru", "Привет Мир!")]
         public async Task ReturnCorrectTranslation_Json(string lang, string result)
         {
             var languageResolverMock = new Mock<ILanguageResolver>();
@@ -50,15 +43,32 @@ namespace Transmogrify.Tests
             var translator2 = new Translator(Config, new[] {languageResolverMock.Object},
                                              new Microsoft.Extensions.DependencyInjection.Transmogrify.Newtonsoft.
                                                  TransmogrifyJson());
-            var translation1 = await translator1.GetTranslation(c_file, c_key);
-            var translation2 = await translator2.GetTranslation(c_file, c_key);
+            var translation1 = await translator1.GetTranslation("main", "Hello");
+            var translation2 = await translator2.GetTranslation("main", "Hello");
             Assert.Equal(result, translation1);
             Assert.Equal(result, translation2);
         }
 
         [Theory]
-        [InlineData(c_englishPack, c_russianPack, c_englishResult)]
-        [InlineData(c_russianPack, c_englishPack, c_russianResult)]
+        [InlineData("en", "Hello World!", "Sec")]
+        [InlineData("ru", "Привет Мир!", "Сек")]
+        public async Task BothFilesAreLoadedInMemory(string pack, string expected1, string expected2)
+        {
+            var languageResolverMock1 = new Mock<ILanguageResolver>();
+            languageResolverMock1.Setup(x => x.GetLanguageCode()).ReturnsAsync(pack);
+
+            var translator = new Translator(Config, new[] {languageResolverMock1.Object},
+                                            new System.Text.Json.Transmogrify.TransmogrifyJson());
+
+            var translation1 = await translator.GetTranslation("main", "Hello");
+            var translation2 = await translator.GetTranslation("second", "Sec");
+            Assert.Equal(expected1, translation1);
+            Assert.Equal(expected2, translation2);
+        }
+
+        [Theory]
+        [InlineData("en", "ru", "Hello World!")]
+        [InlineData("ru", "en", "Привет Мир!")]
         public async Task LanguageResolversUsedInOrder(
             string first,
             string second,
@@ -72,13 +82,13 @@ namespace Transmogrify.Tests
             var translator = new Translator(Config, new[] {languageResolverMock1.Object, languageResolverMock2.Object},
                                             new System.Text.Json.Transmogrify.TransmogrifyJson());
 
-            var translation = await translator.GetTranslation(c_file, c_key);
+            var translation = await translator.GetTranslation("main", "Hello");
             Assert.Equal(result, translation);
         }
 
         [Theory]
-        [InlineData("Albanian", c_russianPack, c_russianResult)]
-        [InlineData("Albanian", c_englishPack, c_englishResult)]
+        [InlineData("Albanian", "en", "Hello World!")]
+        [InlineData("Albanian", "ru", "Привет Мир!")]
         public async Task SkipsMissingLanguageResolvers(
             string first,
             string second,
@@ -92,10 +102,9 @@ namespace Transmogrify.Tests
             var translator = new Translator(Config, new[] {languageResolverMock1.Object, languageResolverMock2.Object},
                                             new System.Text.Json.Transmogrify.TransmogrifyJson());
 
-            var translation = await translator.GetTranslation(c_file, c_key);
+            var translation = await translator.GetTranslation("main", "Hello");
             Assert.Equal(result, translation);
         }
-
         
         // [Theory]
         // [InlineData(c_englishPack, "Bob")]
@@ -108,7 +117,7 @@ namespace Transmogrify.Tests
         //     var translator = new Translator(Config, new[] {languageResolverMock1.Object},
         //                                     new System.Text.Json.Transmogrify.TransmogrifyJson());
         //     
-        //     var translation = await translator.GetTranslation(c_file, "Nest:Bob");
+        //     var translation = await translator.GetTranslation("main", "Nest:Bob");
         //     Assert.Equal(expected, translation);
         // }
     }
