@@ -25,7 +25,7 @@ namespace Transmogrify.Tests
                 {
                     ["main"] = new Dictionary<string, string>
                     {
-                        ["Hello"] = "Hello World!"
+                        ["Hello"] = "Hello World!",
                     },
                     ["second"] = new Dictionary<string, string>
                     {
@@ -36,7 +36,7 @@ namespace Transmogrify.Tests
                 {
                     ["main"] = new Dictionary<string, string>
                     {
-                        ["Hello"] = "Привет Мир!"
+                        ["Hello"] = "Привет Мир!",
                     },
                     ["second"] = new Dictionary<string, string>
                     {
@@ -63,7 +63,6 @@ namespace Transmogrify.Tests
             await ThrowsAsync<TransmogrifyMissingKeyException>(Action);
         } 
         
-        
         [Fact]
         public async Task ThrowsWhen_LanguagePackFileMissingKey()
         {
@@ -88,6 +87,22 @@ namespace Transmogrify.Tests
             var translation1 = await translator1.GetTranslation("main", "Hello");
 
             Equal(result, translation1);
+        }
+        
+        [Theory]
+        [InlineData("Hello {0}", "Hello One", "One")]
+        [InlineData("Hello {0}, {1}", "Hello One, Two", "One", "Two")]
+        [InlineData("Hello {0}, {1}, {2}", "Hello One, Two, Three", "One", "Two", "Three")]
+        public async Task GetTranslations_InsertsSingleParameter(string sentenceMap, string expected, params string[] parameters)
+        {
+            _library["en"]["main"]["Param"] = sentenceMap;
+            _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync("en");
+            var languageResolvers = new[] {_mockLanguageResolver.Object};
+            var translator = new Translator(Config, languageResolvers, _mockLibraryFactory.Object);
+
+            var translation = await translator.GetTranslation("main", "Param", parameters);
+
+            Equal(expected, translation);
         }
 
         [Theory]

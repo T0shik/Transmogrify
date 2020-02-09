@@ -28,7 +28,7 @@
           <e p="ITranslator.cs" t="Include" />
           <e p="LibraryFactoryBase.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
-            <e p="Debug" t="Include">
+            <e p="Release" t="Include">
               <e p="netstandard2.0" t="Include">
                 <e p="Transmogrify.AssemblyInfo.cs" t="Include" />
               </e>
@@ -41,7 +41,7 @@
         <e p="Transmogrify.DependencyInjection" t="IncludeRecursive">
           <e p="bin" t="ExcludeRecursive" />
           <e p="obj" t="ExcludeRecursive">
-            <e p="Debug" t="Include">
+            <e p="Release" t="Include">
               <e p="netstandard2.0" t="Include">
                 <e p="Transmogrify.DependencyInjection.AssemblyInfo.cs" t="Include" />
               </e>
@@ -54,7 +54,7 @@
           <e p="bin" t="ExcludeRecursive" />
           <e p="LibraryFactory.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
-            <e p="Debug" t="Include">
+            <e p="Release" t="Include">
               <e p="netcoreapp3.1" t="Include">
                 <e p="Transmogrify.DependencyInjection.Json.AssemblyInfo.cs" t="Include" />
               </e>
@@ -67,7 +67,7 @@
           <e p="bin" t="ExcludeRecursive" />
           <e p="LibraryFactory.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
-            <e p="Debug" t="Include">
+            <e p="Release" t="Include">
               <e p="netstandard2.0" t="Include">
                 <e p="Transmogrify.DependencyInjection.Newtonsoft.AssemblyInfo.cs" t="Include" />
               </e>
@@ -98,7 +98,7 @@
           </e>
           <e p="LibraryFactoryBaseTests.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
-            <e p="Debug" t="Include">
+            <e p="Release" t="Include">
               <e p="netcoreapp3.1" t="Include">
                 <e p="Transmogrify.Tests.AssemblyInfo.cs" t="Include" />
               </e>

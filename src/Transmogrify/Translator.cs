@@ -27,7 +27,7 @@ namespace Transmogrify
         public async Task<string> GetTranslation(string file, string key)
         {
             var code = await GetLanguageCode();
-
+            
             if (!_library[code].ContainsKey(file))
                 throw new
                     TransmogrifyMissingKeyException($"File: \"{file}\" is missing from the library: \"{code}\"");
@@ -37,6 +37,16 @@ namespace Transmogrify
                     TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\" file: \"{file}\"");
 
             return _library[code][file][key];
+        }
+
+        public async Task<string> GetTranslation(
+            string file,
+            string key,
+            params string[] parameters)
+        {
+            var translation = await GetTranslation(file, key);
+
+            return string.Format(translation, parameters);
         }
 
         private async Task<string> GetLanguageCode()
