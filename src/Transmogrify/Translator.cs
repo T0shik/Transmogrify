@@ -18,7 +18,6 @@ namespace Transmogrify
             IEnumerable<ILanguageResolver> languageResolvers,
             ILibraryFactory libraryFactory)
         {
-            
             _transmogrifyConfig = transmogrifyConfig;
             _languageResolvers = languageResolvers;
             _library = libraryFactory.GetOrLoad();
@@ -27,14 +26,34 @@ namespace Transmogrify
         public async Task<string> GetTranslation(string file, string key)
         {
             var code = await GetLanguageCode();
-            
+
             if (!_library[code].ContainsKey(file))
-                throw new
-                    TransmogrifyMissingKeyException($"File: \"{file}\" is missing from the library: \"{code}\"");
+            {
+                var originalCode = code;
+                if (!string.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage))
+                    code = _transmogrifyConfig.DefaultLanguage;
+                else
+                    throw new
+                        TransmogrifyMissingKeyException($"File: \"{file}\" is missing from the library: \"{code}\"");
+
+                if (!_library[code].ContainsKey(file))
+                    throw new
+                        TransmogrifyMissingKeyException($"File: \"{file}\" is missing from the library: \"{originalCode}\" and \"{code}\"");
+            }
 
             if (!_library[code][file].ContainsKey(key))
-                throw new
-                    TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\" file: \"{file}\"");
+            {
+                var originalCode = code;
+                if (!string.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage))
+                    code = _transmogrifyConfig.DefaultLanguage;
+                else
+                    throw new
+                        TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{code}\" file: \"{file}\"");
+
+                if (!_library[code].ContainsKey(file))
+                    throw new
+                        TransmogrifyMissingKeyException($"Key: \"{key}\" is missing from the library: \"{originalCode}\" and \"{code}\" file: \"{file}\"");
+            }
 
             return _library[code][file][key];
         }
@@ -60,7 +79,7 @@ namespace Transmogrify
                 }
             }
 
-            if (String.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage))
+            if (string.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage))
             {
                 throw new
                     TransmogrifyFailedToResolveLanguageCode("Couldn't resolve a language code and no default language was set.");

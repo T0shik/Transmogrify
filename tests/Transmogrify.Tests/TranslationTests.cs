@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Transmogrify.Exceptions;
@@ -26,10 +27,15 @@ namespace Transmogrify.Tests
                     ["main"] = new Dictionary<string, string>
                     {
                         ["Hello"] = "Hello World!",
+                        ["unique"] = "Unique"
                     },
                     ["second"] = new Dictionary<string, string>
                     {
-                        ["Sec"] = "Sec"
+                        ["Sec"] = "Sec",
+                    },
+                    ["unique"] =new Dictionary<string, string>
+                    {
+                        ["unique"] = "Unique"
                     }
                 },
                 ["ru"] = new Dictionary<string, Dictionary<string, string>>
@@ -163,20 +169,46 @@ namespace Transmogrify.Tests
             var translation = await translator.GetTranslation("main", "Hello");
             Equal(result, translation);
         }
+        
+        [Fact]
+        public async Task UsesDefaultLanguagePackIfCodeNotResolved()
+        {
+            var config = Config;
+            config.DefaultLanguage = "en";
+            var translator = new Translator(config, Enumerable.Empty<ILanguageResolver>(), _mockLibraryFactory.Object);
+            var translation = await translator.GetTranslation("main", "Hello");
+            Equal("Hello World!", translation);
+        }
+        
+        [Fact]
+        public async Task TriesDefaultLanguagePackIfFileNotResolved()
+        {
+            var config = Config;
+            config.DefaultLanguage = "en";
+            var languageResolverMock = new Mock<ILanguageResolver>();
+            languageResolverMock.Setup(x => x.GetLanguageCode()).ReturnsAsync("ru");
+            var languageResolvers = new[] {languageResolverMock.Object};
+            var translator = new Translator(config, languageResolvers, _mockLibraryFactory.Object);
 
-        // [Theory]
-        // [InlineData(c_englishPack, "Bob")]
-        // [InlineData(c_russianPack, "Боб")]
-        // public async Task NestedObjectNavigationWithinFile(string lang, string expected)
-        // {
-        //     var languageResolverMock1 = new Mock<ILanguageResolver>();
-        //     languageResolverMock1.Setup(x => x.GetLanguageCode()).ReturnsAsync(lang);
-        //     
-        //     var translator = new Translator(Config, new[] {languageResolverMock1.Object},
-        //                                     new System.Text.Json.Transmogrify.TransmogrifyJson());
-        //     
-        //     var translation = await translator.GetTranslation("main", "Nest:Bob");
-        //     Assert.Equal(expected, translation);
-        // }
+            var translation = await translator.GetTranslation("unique", "unique");
+            
+            Equal("Unique", translation);
+        }
+        
+        
+        [Fact]
+        public async Task TriesDefaultLanguagePackIfKeyNotResolved()
+        {
+            var config = Config;
+            config.DefaultLanguage = "en";
+            var languageResolverMock = new Mock<ILanguageResolver>();
+            languageResolverMock.Setup(x => x.GetLanguageCode()).ReturnsAsync("ru");
+            var languageResolvers = new[] {languageResolverMock.Object};
+            var translator = new Translator(config, languageResolvers, _mockLibraryFactory.Object);
+
+            var translation = await translator.GetTranslation("main", "unique");
+            
+            Equal("Unique", translation);
+        }
     }
 }
