@@ -16,7 +16,7 @@ namespace Transmogrify.DependencyInjection
                 services.AddScoped(typeof(ILanguageResolver),resolver);
             }
             
-            services.AddScoped<ITranslator, Translator>();
+            services.AddScoped<Library>();
 
             return services;
         }

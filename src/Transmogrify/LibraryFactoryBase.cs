@@ -12,7 +12,7 @@ namespace Transmogrify
             if (string.IsNullOrWhiteSpace(transmogrifyConfig.LanguagePath))
             {
                 throw new
-                    TransmogrifyInvalidLanguagePathException($"Language path: {transmogrifyConfig.LanguagePath} is not valid");
+                    TransmogrifyInvalidLanguagePath($"Language path: {transmogrifyConfig.LanguagePath} is not valid");
             }
             
             _languagePath = transmogrifyConfig.LanguagePath;
@@ -23,8 +23,8 @@ namespace Transmogrify
         private readonly string _languagePath;
         private readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> _cachedLibrary;
         private bool _loaded;
-        
-        public abstract T Deserialize<T>(string value);
+
+        protected abstract T Deserialize<T>(string value);
 
         public Dictionary<string, Dictionary<string, Dictionary<string, string>>> GetOrLoad()
         {

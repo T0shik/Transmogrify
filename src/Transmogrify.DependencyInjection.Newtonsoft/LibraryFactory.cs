@@ -6,8 +6,8 @@ namespace Transmogrify.DependencyInjection.Newtonsoft
     {
         public LibraryFactory(TransmogrifyConfig transmogrifyConfig)
             : base(transmogrifyConfig) { }
-        
-        public override T Deserialize<T>(string value)
+
+        protected override T Deserialize<T>(string value)
         {
             return JsonConvert.DeserializeObject<T>(value);
         }

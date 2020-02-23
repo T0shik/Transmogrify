@@ -11,7 +11,7 @@ namespace Transmogrify.Tests
             public BaseMock(TransmogrifyConfig transmogrifyConfig)
                 : base(transmogrifyConfig) { }
 
-            public override T Deserialize<T>(string value)
+            protected override T Deserialize<T>(string value)
             {
                 throw new NotImplementedException();
             }
@@ -24,7 +24,7 @@ namespace Transmogrify.Tests
         {
             BaseMock Action() => new BaseMock(new TransmogrifyConfig {LanguagePath = path});
 
-            Assert.Throws<TransmogrifyInvalidLanguagePathException>(Action);
+            Assert.Throws<TransmogrifyInvalidLanguagePath>(Action);
         }
     }
 }

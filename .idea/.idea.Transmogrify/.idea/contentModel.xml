@@ -19,13 +19,15 @@
           <e p="bin" t="ExcludeRecursive" />
           <e p="Exceptions" t="Include">
             <e p="TransmogrifyFailedToResolveLanguageCode.cs" t="Include" />
-            <e p="TransmogrifyInvalidLanguagePathException.cs" t="Include" />
+            <e p="TransmogrifyInvalidLanguagePath.cs" t="Include" />
             <e p="TransmogrifyInvalidLanguageResolverType.cs" t="Include" />
-            <e p="TransmogrifyMissingKeyException.cs" t="Include" />
+            <e p="TransmogrifyMissingKey.cs" t="Include" />
           </e>
           <e p="ILanguageResolver.cs" t="Include" />
           <e p="ILibraryFactory.cs" t="Include" />
-          <e p="ITranslator.cs" t="Include" />
+          <e p="IReader.cs" t="Include" />
+          <e p="LanguagePack.cs" t="Include" />
+          <e p="Library.cs" t="Include" />
           <e p="LibraryFactoryBase.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
             <e p="Release" t="Include">
@@ -34,7 +36,7 @@
               </e>
             </e>
           </e>
-          <e p="Translator.cs" t="Include" />
+          <e p="TranslationContext.cs" t="Include" />
           <e p="Transmogrify.csproj" t="IncludeRecursive" />
           <e p="TransmogrifyConfig.cs" t="Include" />
         </e>
@@ -96,6 +98,7 @@
               <e p="second.json" t="Include" />
             </e>
           </e>
+          <e p="LanguagePackTests.cs" t="Include" />
           <e p="LibraryFactoryBaseTests.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
             <e p="Release" t="Include">
@@ -104,6 +107,7 @@
               </e>
             </e>
           </e>
+          <e p="TranslationContextTests.cs" t="Include" />
           <e p="TranslationTests.cs" t="Include" />
           <e p="Transmogrify.Tests.csproj" t="IncludeRecursive" />
         </e>
