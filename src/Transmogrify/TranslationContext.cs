@@ -3,17 +3,17 @@ using Transmogrify.Exceptions;
 
 namespace Transmogrify
 {
-    public class TranslationContext : IReader
+    public class TranslationContext : IDictionary
     {
-        private readonly IReader _primary;
-        private readonly IReader _fallback;
+        private readonly IDictionary _primary;
+        private readonly IDictionary _fallback;
 
-        public TranslationContext(IReader primary)
+        public TranslationContext(IDictionary primary)
         {
             _primary = primary;
         }
 
-        public TranslationContext(IReader primary, IReader fallback)
+        public TranslationContext(IDictionary primary, IDictionary fallback)
         {
             _primary = primary;
             _fallback = fallback;
@@ -32,7 +32,7 @@ namespace Transmogrify
             return ReadWithFallback(pack => pack.Read(page, phrase, parameters));
         }
 
-        private string ReadWithFallback(Func<IReader, string> read)
+        private string ReadWithFallback(Func<IDictionary, string> read)
         {
             try
             {

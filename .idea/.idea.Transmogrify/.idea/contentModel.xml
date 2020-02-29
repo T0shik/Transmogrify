@@ -23,9 +23,9 @@
             <e p="TransmogrifyInvalidLanguageResolverType.cs" t="Include" />
             <e p="TransmogrifyMissingKey.cs" t="Include" />
           </e>
+          <e p="IDictionary.cs" t="Include" />
           <e p="ILanguageResolver.cs" t="Include" />
           <e p="ILibraryFactory.cs" t="Include" />
-          <e p="IReader.cs" t="Include" />
           <e p="LanguagePack.cs" t="Include" />
           <e p="Library.cs" t="Include" />
           <e p="LibraryFactoryBase.cs" t="Include" />
@@ -100,6 +100,7 @@
           </e>
           <e p="LanguagePackTests.cs" t="Include" />
           <e p="LibraryFactoryBaseTests.cs" t="Include" />
+          <e p="LibraryTests.cs" t="Include" />
           <e p="obj" t="ExcludeRecursive">
             <e p="Release" t="Include">
               <e p="netcoreapp3.1" t="Include">
@@ -108,8 +109,8 @@
             </e>
           </e>
           <e p="TranslationContextTests.cs" t="Include" />
-          <e p="TranslationTests.cs" t="Include" />
           <e p="Transmogrify.Tests.csproj" t="IncludeRecursive" />
+          <e p="TransmogrifyConfigTests.cs" t="Include" />
         </e>
       </e>
       <e p="Transmogrify.sln" t="IncludeFlat" />

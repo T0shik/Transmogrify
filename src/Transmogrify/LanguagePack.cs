@@ -3,7 +3,7 @@ using Transmogrify.Exceptions;
 
 namespace Transmogrify
 {
-    public class LanguagePack : IReader
+    public class LanguagePack : IDictionary
     {
         private readonly Dictionary<string, Dictionary<string, string>> _languagePack;
         private readonly string _packName;

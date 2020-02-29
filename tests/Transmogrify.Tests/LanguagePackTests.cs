@@ -18,7 +18,7 @@ namespace Transmogrify.Tests
             };
 
         [Fact]
-        public void GetPhrase_ThrowsWhenPageMissing()
+        public void ThrowsWhenPageMissing()
         {
             var pack = new LanguagePack(_pack, "test");
 
@@ -26,7 +26,7 @@ namespace Transmogrify.Tests
         }
         
         [Fact]
-        public void GetPhrase_ThrowsWhenPhraseMissing()
+        public void ThrowsWhenPhraseMissing()
         {
             var pack = new LanguagePack(_pack, "test");
 
@@ -34,7 +34,7 @@ namespace Transmogrify.Tests
         }
         
         [Fact]
-        public void GetPhrase_ReturnsPhrase()
+        public void ReturnsPhrase()
         {
             var pack = new LanguagePack(_pack, "test");
             var phrase = pack.Read("page", "phrase");
@@ -43,7 +43,7 @@ namespace Transmogrify.Tests
         }
         
         [Fact]
-        public void GetPhrase_FormatsPhrase()
+        public void FormatsPhrase()
         {
             var pack = new LanguagePack(_pack, "test");
             var phrase = pack.Read("page", "format", "World");

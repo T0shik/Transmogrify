@@ -7,6 +7,10 @@ namespace Transmogrify
 {
     public abstract class LibraryFactoryBase : ILibraryFactory
     {
+        private readonly string _languagePath;
+        private readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> _cachedLibrary;
+        private bool _loaded;
+
         protected LibraryFactoryBase(TransmogrifyConfig transmogrifyConfig)
         {
             if (string.IsNullOrWhiteSpace(transmogrifyConfig.LanguagePath))
@@ -19,10 +23,6 @@ namespace Transmogrify
             _cachedLibrary = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
             _loaded = false;
         }
-
-        private readonly string _languagePath;
-        private readonly Dictionary<string, Dictionary<string, Dictionary<string, string>>> _cachedLibrary;
-        private bool _loaded;
 
         protected abstract T Deserialize<T>(string value);
 
