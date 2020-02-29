@@ -14,12 +14,15 @@ namespace Transmogrify.Tests
             var config = new TransmogrifyConfig();
             Assert.Throws<TransmogrifyInvalidLanguageResolverType>(() => config.AddResolver(typeof(string)));
         }
-        
+
         public class MockResolver : ILanguageResolver
         {
-            public Task<string> GetLanguageCode() {}
+            public Task<string> GetLanguageCode()
+            {
+                return Task.FromResult("");
+            }
         }
-        
+
         [Fact]
         public void AddsResolvers()
         {
