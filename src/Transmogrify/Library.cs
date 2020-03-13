@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Transmogrify.Exceptions;
@@ -33,7 +31,7 @@ namespace Transmogrify
             {
                 return new TranslationContext(primaryPack, new LanguagePack(_library[DefaultLanguage], packName));
             }
-            
+
             return new TranslationContext(primaryPack);
         }
 
@@ -45,9 +43,13 @@ namespace Transmogrify
             foreach (var languageResolver in _languageResolvers)
             {
                 var code = await languageResolver.GetLanguageCode();
-                if (!string.IsNullOrWhiteSpace(code) && _library.ContainsKey(code))
+                if (string.IsNullOrWhiteSpace(code)) continue;
+                
+                var pack = LanguagePacks.FirstOrDefault(x => code.Contains(x));
+                
+                if (!string.IsNullOrEmpty(pack))
                 {
-                    return code;
+                    return pack;
                 }
             }
 
@@ -59,5 +61,6 @@ namespace Transmogrify
 
             return _transmogrifyConfig.DefaultLanguage;
         }
+        private IEnumerable<string> LanguagePacks => _library.Select(x => x.Key);
     }
 }

@@ -58,6 +58,7 @@ namespace Transmogrify.Tests
 
         [Theory]
         [InlineData("en", "Hello World!")]
+        [InlineData("en-US;en", "Hello World!")]
         [InlineData("ru", "Привет Мир!")]
         public async Task ResolvesCorrectContext(string language, string expected)
         {
