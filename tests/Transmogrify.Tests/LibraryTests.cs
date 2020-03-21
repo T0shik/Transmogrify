@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
 using Moq;
@@ -81,12 +82,15 @@ namespace Transmogrify.Tests
 
             Equal(expected, translation);
         }
-        
+
         [Theory]
         [InlineData("en", "ru", "Hello World!")]
         [InlineData("ru", "en", "Привет Мир!")]
         [InlineData("el", "en", "Hello World!")]
-        public async Task ResolversUsedInOrder(string firstResult, string secondResult, string expected)
+        public async Task ResolversUsedInOrder(
+            string firstResult,
+            string secondResult,
+            string expected)
         {
             var first = new Mock<ILanguageResolver>();
             var second = new Mock<ILanguageResolver>();
@@ -110,7 +114,23 @@ namespace Transmogrify.Tests
 
             var phraseTranslation = context.Read("main", "unique");
             var pageTranslation = context.Read("unique", "unique");
-            
+
+            Equal("Unique", phraseTranslation);
+            Equal("Unique", pageTranslation);
+        }
+
+        [Theory]
+        [InlineData("ru")]
+        [InlineData(null)]
+        public void FallsBackWhenManualLanguageIsWrong(string lang)
+        {
+            var config = Config;
+            config.DefaultLanguage = "en";
+            var context = CreateLibrary(config).GetContext(lang);
+
+            var phraseTranslation = context.Read("main", "unique");
+            var pageTranslation = context.Read("unique", "unique");
+
             Equal("Unique", phraseTranslation);
             Equal("Unique", pageTranslation);
         }
@@ -121,7 +141,7 @@ namespace Transmogrify.Tests
             _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync("el");
             return ThrowsAsync<TransmogrifyFailedToResolveLanguageCode>(() => CreateLibrary().GetContext());
         }
-        
+
         [Fact]
         public async Task ResolvesDefaultLanguageWhenPresent()
         {
@@ -129,10 +149,10 @@ namespace Transmogrify.Tests
             config.DefaultLanguage = "en";
             _mockLanguageResolver.Setup(x => x.GetLanguageCode()).ReturnsAsync("el");
             var context = await CreateLibrary(config).GetContext();
-            
+
             Equal("Hello World!", context.Read("main", "Hello"));
         }
-        
+
         [Fact]
         public async Task FormatsPhrase()
         {
@@ -151,6 +171,6 @@ namespace Transmogrify.Tests
             var context = await CreateLibrary().GetContext();
 
             Throws<TransmogrifyMissingKey>(() => context.Read("404", "404"));
-        } 
+        }
     }
 }

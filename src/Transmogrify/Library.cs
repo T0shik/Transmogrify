@@ -37,6 +37,11 @@ namespace Transmogrify
 
         public TranslationContext GetContext(string language)
         {
+            if (language == null && HasDefaultLanguage)
+            {
+                return new TranslationContext(DefaultPack);
+            }
+
             var primaryPack = CreatePack(language);
 
             if (HasDefaultLanguage && DefaultLanguage != language)
