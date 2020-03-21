@@ -25,11 +25,23 @@ namespace Transmogrify
         {
             var packName = await GetLanguagePackName();
 
-            var primaryPack = new LanguagePack(_library[packName], packName);
+            var primaryPack = CreatePack(packName);
 
             if (HasDefaultLanguage && DefaultLanguage != packName)
             {
-                return new TranslationContext(primaryPack, new LanguagePack(_library[DefaultLanguage], packName));
+                return new TranslationContext(primaryPack, DefaultPack);
+            }
+
+            return new TranslationContext(primaryPack);
+        }
+
+        public TranslationContext GetContext(string language)
+        {
+            var primaryPack = CreatePack(language);
+
+            if (HasDefaultLanguage && DefaultLanguage != language)
+            {
+                return new TranslationContext(primaryPack, DefaultPack);
             }
 
             return new TranslationContext(primaryPack);
@@ -37,6 +49,8 @@ namespace Transmogrify
 
         private string DefaultLanguage => _transmogrifyConfig.DefaultLanguage;
         private bool HasDefaultLanguage => !string.IsNullOrEmpty(_transmogrifyConfig.DefaultLanguage);
+        private LanguagePack DefaultPack => CreatePack(DefaultLanguage);
+        private LanguagePack CreatePack(string language) => new LanguagePack(_library[language], language);
 
         private async Task<string> GetLanguagePackName()
         {

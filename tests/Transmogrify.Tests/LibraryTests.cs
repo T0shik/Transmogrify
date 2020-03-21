@@ -69,6 +69,18 @@ namespace Transmogrify.Tests
 
             Equal(expected, translation);
         }
+
+        [Theory]
+        [InlineData("en", "Hello World!")]
+        [InlineData("ru", "Привет Мир!")]
+        public void ResolvesCorrectSpecificContext(string language, string expected)
+        {
+            var context = CreateLibrary().GetContext(language);
+
+            var translation = context.Read("main", "Hello");
+
+            Equal(expected, translation);
+        }
         
         [Theory]
         [InlineData("en", "ru", "Hello World!")]
